@@ -216,8 +216,6 @@ const Button = ({
   const containerColor = color || colors.grayLight;
   const handleEventWithAnalytics = useAnalytics();
 
-  console.log(ariaProps);
-
   // get everything we expose + anything consumer wants to send to container
   const mergedContainerProps = {
     as: ButtonElement,

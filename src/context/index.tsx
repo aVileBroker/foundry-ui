@@ -85,7 +85,7 @@ export const FoundryProvider = ({
     analyticsFunction?: AnalyticsFunctionType;
     styleConstants?: { [key in string]: number | string };
     spotlightElements?: SpotlightElement[];
-    setSpotlightElements: Dispatch<SetStateAction<SpotlightElement[]>>;
+    setSpotlightElements?: Dispatch<SetStateAction<SpotlightElement[]>>;
   };
   children: React.ReactNode;
 }): JSX.Element => {
