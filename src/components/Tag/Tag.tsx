@@ -83,12 +83,10 @@ const StyledProgress = styled(Progress)`
 `;
 
 const IconContainer = styled(Div)`
-  ${({ position, hasContent }: IconContainerProps) => {
-    return `
-    height: 1em;
-    ${hasContent ? `margin-${position === 'right' ? 'left' : 'right'}: 1em;` : ''}
-  `;
-  }}
+  ${({ position, hasContent }: IconContainerProps) => `
+      height: 1em;
+      ${hasContent ? `margin-${position === 'right' ? 'left' : 'right'}: 1em;` : ''}
+    `}
 `;
 
 const Tag = ({

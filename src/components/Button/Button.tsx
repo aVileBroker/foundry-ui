@@ -1,8 +1,9 @@
-import React, { ComponentProps, ReactNode } from 'react';
+import React, { ComponentProps, ReactNode, RefObject } from 'react';
 import UnstyledIcon from '@mdi/react';
 import { mdiLoading } from '@mdi/js';
 import styled, { StyledComponentBase } from 'styled-components';
 import { darken } from 'polished';
+import { useButton } from 'react-aria';
 
 import timings from '../../enums/timings';
 import { useAnalytics, useTheme } from '../../context';
@@ -206,10 +207,16 @@ const Button = ({
   onMouseUp = () => {},
   id,
 }: ButtonProps): JSX.Element | null => {
+  const { buttonProps: ariaProps } = useButton(
+    containerProps,
+    containerRef as RefObject<HTMLButtonElement>,
+  );
   const hasContent = Boolean(children);
   const { colors } = useTheme();
   const containerColor = color || colors.grayLight;
   const handleEventWithAnalytics = useAnalytics();
+
+  console.log(ariaProps);
 
   // get everything we expose + anything consumer wants to send to container
   const mergedContainerProps = {
@@ -232,7 +239,7 @@ const Button = ({
   };
 
   return (
-    <StyledContainer ref={containerRef} role="button" {...mergedContainerProps}>
+    <StyledContainer {...ariaProps} ref={containerRef} role="button" {...mergedContainerProps}>
       {!isProcessing &&
         iconPrefix &&
         (typeof iconPrefix === 'string' && iconPrefix !== '' ? (

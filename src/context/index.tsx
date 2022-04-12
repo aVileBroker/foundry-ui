@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
 import styled from 'styled-components';
 import * as rdd from 'react-device-detect';
 import fonts from '../enums/fonts';
@@ -46,11 +46,21 @@ type AnalyticsFunctionType = (
   props?: any,
 ) => any;
 
+export type SpotlightElement = {
+  element?: HTMLElement;
+  title?: string;
+  subtitle?: string;
+  offsetY?: string;
+  index: number;
+};
+
 export type FoundryContextType = {
   globalStyles: string;
   colors: FoundryColorsType;
   analyticsFunction: AnalyticsFunctionType;
   styleConstants: { [key in string]: number | string };
+  spotlightElements: SpotlightElement[];
+  setSpotlightElements: Dispatch<SetStateAction<SpotlightElement[]>>;
 };
 
 const defaultContextValue = {
@@ -58,6 +68,8 @@ const defaultContextValue = {
   colors: colorsEnum,
   analyticsFunction: defaultAnalyticsFunction,
   styleConstants: {},
+  spotlightElements: [],
+  setSpotlightElements: () => {},
   // TODO Add Foundry's "theme" to items here and pull from the ContextProvider
 };
 
@@ -71,16 +83,20 @@ export const FoundryProvider = ({
     globalStyles?: string;
     colors?: Partial<Record<keyof typeof colorsEnum, string>>;
     analyticsFunction?: AnalyticsFunctionType;
-    styleConstants?: {};
+    styleConstants?: { [key in string]: number | string };
+    spotlightElements?: SpotlightElement[];
+    setSpotlightElements: Dispatch<SetStateAction<SpotlightElement[]>>;
   };
   children: React.ReactNode;
-}) => {
+}): JSX.Element => {
   const {
     globalStyles = defaultGlobalStyles,
     colors = colorsEnum,
     styleConstants = {},
     analyticsFunction = defaultAnalyticsFunction,
   } = value;
+
+  const [spotlightElements, setSpotlightElements] = useState<SpotlightElement[]>([]);
 
   // use the default set of styles, unless we've got something to override
   const mergedGlobalStyles =
@@ -102,6 +118,8 @@ export const FoundryProvider = ({
         colors: mergedColors,
         analyticsFunction,
         styleConstants,
+        spotlightElements,
+        setSpotlightElements,
       }}
     >
       {children}
@@ -113,6 +131,12 @@ export function useTheme(): FoundryContextType {
   const theme = useContext(FoundryContext);
   return theme;
 }
+
+export const useSpotlightCollector = (newElement: SpotlightElement): void => {
+  const { spotlightElements, setSpotlightElements } = useContext(FoundryContext);
+
+  setSpotlightElements([...spotlightElements, newElement]);
+};
 
 export const withGlobalStyle = (Component: StyledSubcomponentType) => {
   const ComponentWithGlobalStyles = styled(Component)`

@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import Spotlight, { SpotlightProps } from './Spotlight';
 import { Button, Card, Text, variants, colors } from '../../index';
+import { FoundryProvider } from '../../context';
 
 const Header = styled(Card.NoPaddingHeader)`
   display: flex;
@@ -53,7 +54,7 @@ export const AnimatedSpotlight: Story = (args: Partial<SpotlightProps>) => {
   const lastStep = currStep === stepOptions.length - 1;
 
   return (
-    <>
+    <FoundryProvider>
       <Card
         StyledHeader={Header}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -67,6 +68,7 @@ export const AnimatedSpotlight: Story = (args: Partial<SpotlightProps>) => {
             iconSuffix={mdiDotsVertical}
             variant={variants.text}
             color="black"
+            containerProps={{ 'aria-label': 'non-functional menu button' }}
           />
         }
         footer={
@@ -120,7 +122,7 @@ export const AnimatedSpotlight: Story = (args: Partial<SpotlightProps>) => {
           </Button>
         </Spotlight>
       )}
-    </>
+    </FoundryProvider>
   );
 };
 AnimatedSpotlight.args = {
